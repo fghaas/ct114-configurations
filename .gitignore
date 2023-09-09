@@ -1,0 +1,8 @@
+my_tf_keypair
+my_tf_keypair.pub
+
+*/.terraform/*
+*/.terraform.lock.hcl
+
+*/terraform.tfstate
+*/terraform.tfstate.backup
