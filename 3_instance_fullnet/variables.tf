@@ -18,21 +18,23 @@ variable "secgroup_name" {
   type = string
 }
 
-variable "instance_name" {
-  type = string
-}
-
 variable external_network {
   type = string
   default = "ext-net"
 }
 
-variable "image" {
+variable "instance_name" {
   type = string
-  default = "Ubuntu 22.04 Jammy Jellyfish x86_64"
 }
 
-variable "flavor" {
+variable "image_name" {
   type = string
-  default = "2C-2GB-20GB"
+}
+
+variable "instance_flavor" {
+  type = string
+}
+
+variable "boot_vol_capacity" {
+  type = number
 }

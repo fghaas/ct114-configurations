@@ -3,11 +3,6 @@ resource "openstack_compute_keypair_v2" "keypair" {
   public_key = "${file("../my_tf_keypair.pub")}"
 }
 
-resource "openstack_networking_router_v2" "router" {
-  name = var.router_name
-  external_network_id = data.openstack_networking_network_v2.external_network.id
-}
-
 resource "openstack_networking_network_v2" "network" {
   name = var.network_name
 }
@@ -18,6 +13,11 @@ resource "openstack_networking_subnet_v2" "subnet" {
   cidr = "10.254.254.0/24"
   ip_version = 4
   dns_nameservers = ["1.1.1.1", "9.9.9.9"]
+}
+
+resource "openstack_networking_router_v2" "router" {
+  name = var.router_name
+  external_network_id = data.openstack_networking_network_v2.external_network.id
 }
 
 resource "openstack_networking_router_interface_v2" "router_interface" {
@@ -51,16 +51,31 @@ resource "openstack_networking_secgroup_rule_v2" "icmp" {
   remote_ip_prefix = "0.0.0.0/0"
 }
 
+data "openstack_images_image_v2" "image" {
+  name = var.image_name
+  most_recent = true
+}
+
 resource "openstack_compute_instance_v2" "instance" {
   name = var.instance_name
-  image_name = var.image
-  flavor_name = var.flavor
+  flavor_name = var.instance_flavor
+
+  block_device {
+    uuid                  = data.openstack_images_image_v2.image.id
+    source_type           = "image"
+    volume_size           = var.boot_vol_capacity
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
+  }
+
   user_data = "${file("config.yaml")}"
   key_pair = openstack_compute_keypair_v2.keypair.name
-  security_groups = [ openstack_networking_secgroup_v2.secgroup.name ]
+
   network {
     uuid = openstack_networking_network_v2.network.id
   }
+  security_groups = [ openstack_networking_secgroup_v2.secgroup.name ]
 }
 
 resource "openstack_compute_floatingip_associate_v2" "floatingip" {

@@ -6,3 +6,5 @@ my_tf_keypair.pub
 
 */terraform.tfstate
 */terraform.tfstate.backup
+
+my_keypair.json

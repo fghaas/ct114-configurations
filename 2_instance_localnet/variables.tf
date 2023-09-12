@@ -14,13 +14,14 @@ variable "instance_name" {
   type = string
 }
 
-variable "image" {
+variable "image_name" {
   type = string
-  default = "Ubuntu 22.04 Jammy Jellyfish x86_64"
 }
 
-variable "flavor" {
+variable "instance_flavor" {
   type = string
-  default = "2C-2GB-20GB"
 }
 
+variable "boot_vol_capacity" {
+  type = number
+}

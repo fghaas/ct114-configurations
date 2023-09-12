@@ -15,12 +15,27 @@ resource "openstack_networking_subnet_v2" "subnet" {
   dns_nameservers = ["1.1.1.1", "9.9.9.9"]
 }
 
+data "openstack_images_image_v2" "image" {
+  name = var.image_name
+  most_recent = true
+}
+
 resource "openstack_compute_instance_v2" "instance" {
   name = var.instance_name
-  image_name = var.image
-  flavor_name = var.flavor
+  flavor_name = var.instance_flavor
+
+  block_device {
+    uuid                  = data.openstack_images_image_v2.image.id
+    source_type           = "image"
+    volume_size           = var.boot_vol_capacity
+    boot_index            = 0
+    destination_type      = "volume"
+    delete_on_termination = true
+  }
+
   user_data = "${file("config.yaml")}"
   key_pair = openstack_compute_keypair_v2.keypair.name
+
   network {
     uuid = openstack_networking_network_v2.network.id
   }
