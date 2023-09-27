@@ -15,12 +15,6 @@ resource "openstack_networking_subnet_v2" "subnet" {
   dns_nameservers = ["1.1.1.1", "9.9.9.9"]
 }
 
-data "openstack_images_image_v2" "image" {
-  name = var.image_name
-  visibility = "public"
-  most_recent = true
-}
-
 resource "openstack_compute_instance_v2" "instance" {
   name = var.instance_name
   flavor_name = var.instance_flavor
@@ -34,7 +28,6 @@ resource "openstack_compute_instance_v2" "instance" {
     delete_on_termination = true
   }
 
-  user_data = "${file("config.yaml")}"
   key_pair = openstack_compute_keypair_v2.keypair.name
 
   network {

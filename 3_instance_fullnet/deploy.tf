@@ -51,12 +51,6 @@ resource "openstack_networking_secgroup_rule_v2" "icmp" {
   remote_ip_prefix = "0.0.0.0/0"
 }
 
-data "openstack_images_image_v2" "image" {
-  name = var.image_name
-  visibility = "public"
-  most_recent = true
-}
-
 resource "openstack_compute_instance_v2" "instance" {
   name = var.instance_name
   flavor_name = var.instance_flavor

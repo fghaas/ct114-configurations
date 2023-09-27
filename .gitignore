@@ -8,3 +8,6 @@ my_tf_keypair.pub
 */terraform.tfstate.backup
 
 my_keypair.json
+my_instance.json
+my_instance_fip.json
+my_instance_list.json
