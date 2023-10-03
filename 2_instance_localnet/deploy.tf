@@ -18,15 +18,7 @@ resource "openstack_networking_subnet_v2" "subnet" {
 resource "openstack_compute_instance_v2" "instance" {
   name = var.instance_name
   flavor_name = var.instance_flavor
-
-  block_device {
-    uuid                  = data.openstack_images_image_v2.image.id
-    source_type           = "image"
-    volume_size           = var.boot_vol_capacity
-    boot_index            = 0
-    destination_type      = "volume"
-    delete_on_termination = true
-  }
+  image_name = var.image_name
 
   key_pair = openstack_compute_keypair_v2.keypair.name
 
